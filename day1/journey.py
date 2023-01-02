@@ -1,5 +1,8 @@
+import random
+
 from elf import Elf
 from food import Food
+from food_types import Milk, Chocolate, Bread, Pizza
 
 
 class Journey:
@@ -8,8 +11,16 @@ class Journey:
 
     def start(self):
         self.read_calories_list()
-        print(self.get_elf_with_most_calories)
-        print(self.get_top_three_calorie_holder)
+
+        print(self.get_elf_with_most_calories())
+        print(self.get_top_three_calorie_holder())
+
+        backpack = [Milk(15), Chocolate(50), Bread(30), Pizza.hawaii(), Pizza(100,["cheese","ham"])]
+        for item in backpack:
+            if item == "pizza":
+                print(f"{item.name} , {item.ingredients}")
+            else:
+                print(f"{item.name} form : {Food.form(item.name)}")
 
     def read_calories_list(self):
         with open("input.txt", "r") as file:
@@ -23,7 +34,6 @@ class Journey:
                 self.elf_list.append(Elf(str(elf_count + 2)))
                 elf_count += 1
 
-    @property
     def get_elf_with_most_calories(self):
         most_calories_elf = self.elf_list[0]
         highest_calories = most_calories_elf.calculate_calories_in_bag()
@@ -32,9 +42,8 @@ class Journey:
                 most_calories_elf = elf
                 highest_calories = elf.calculate_calories_in_bag()
 
-        return f"Name of elf with most calories in bag: {most_calories_elf.get_name} with {highest_calories} in bag."
+        return f"Name of elf with most calories in bag: {most_calories_elf.name} with {highest_calories} in bag."
 
-    @property
     def get_top_three_calorie_holder(self):
         sorted_elf_list = sorted(self.elf_list, key=lambda x: x.calculate_calories_in_bag(), reverse=True)
         first = sorted_elf_list[0]
@@ -44,9 +53,9 @@ class Journey:
         third = sorted_elf_list[2]
         third_calories = third.calculate_calories_in_bag()
 
-        return f"1,{first.get_name} => {first_calories} \n" \
-               f"2,{second.get_name} => {second_calories} \n" \
-               f"3,{third.get_name} => {third_calories} \n" \
+        return f"1,{first.name} => {first_calories} \n" \
+               f"2,{second.name} => {second_calories} \n" \
+               f"3,{third.name} => {third_calories} \n" \
                f"Total calories : {first_calories + second_calories + third_calories}"
 
 
